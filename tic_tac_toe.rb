@@ -56,4 +56,54 @@ class TicTacToe
     display_board
     announce_result
   end
+
+  private
+
+  def valid_move?(move)
+    @board[move] == ' '
+  end
+
+  def make_move(move)
+    @board[move] = @current_player
+  end
+
+  def switch_player
+    @current_player = @current_player == 'X' ? 'O' : 'X'
+  end
+
+  def game_over?
+    winner || draw?
+  end
+
+  def winner
+    winning_combinations.each do |combo|
+      return @board[combo[0]] if combo.all? { |index| @board[index] == @board[combo[0]] && @board[index] != ' ' }
+    end
+    nil
+  end
+
+  def draw?
+    @board.none? { |cell| cell == ' ' }
+  end
+
+  def winning_combinations
+    [
+      [0, 1, 2], # Top row
+      [3, 4, 5], # Middle row
+      [6, 7, 8], # Bottom row
+      [0, 3, 6], # Left column
+      [1, 4, 7], # Middle column
+      [2, 5, 8], # Right column
+      [0, 4, 8], # Diagonal \
+      [2, 4, 6]  # Diagonal /
+    ]
+  end
+
+  def announce_result
+    if winner
+      puts "Player #{winner} wins!"
+    else
+      puts "It's a draw!"
+    end
+  end
 end
